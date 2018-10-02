@@ -1,32 +1,35 @@
 from algoritmia.datastructures.mergefindsets import MergeFindSet
-from easycanvas import EasyCanvas
-from random import shuffle
+from algoritmia.datastructures.digraphs import UndirectedGraph
+from Utils.labyrinthviewer import LabyrinthViewer
+import random
 
 
-def vecinos(v1, v2):
-    if(v1[0]==v2[0]):
-        return 0
-    elif(v1[1]==v2[1]):
-        return 1
-    return None
-
-def create_labyrinth(rows, cols):
-    vertices = list((i, j) for i in range(0, rows) for j in range(0, cols))
+def create_labyrinth(rows: int, cols: int) -> UndirectedGraph:
+    vertices = [(r, c) for r in range(rows) for c in range(cols)]
     mfs = MergeFindSet()
     for v in vertices:
         mfs.add(v)
 
-    edges=[]
-    for i in range(rows):
-        for j in range (cols):
-            edges.append(((i,j),(i,j+1))) if j+1<cols else ""
-            edges.append(((i,j),(i+1,j))) if i+1<cols else ""
-    shuffle(edges)
-    corridors=[]
-    #for a in edges:
+    edges = []
+    for (i, j) in vertices:
+        edges.append(((i, j), (i, j + 1))) if j + 1 < cols else ""
+        edges.append(((i, j), (i + 1, j))) if i + 1 < rows else ""
 
-    print(edges)
-    print(set)
+    random.shuffle(edges)
+    corridors = []
+    for (u, v) in edges:
+        if mfs.find(u) != mfs.find(v):
+            mfs.merge(u, v)
+            corridors.append((u, v))
+
+    return UndirectedGraph(E=corridors)
 
 
-create_labyrinth(10, 10)
+if __name__ == '__main__':
+    rows = 40
+    cols = 60
+    graf = create_labyrinth(rows, cols)
+    source = (0, 0)
+    target = (rows - 1, cols - 1)
+    viewer = LabyrinthViewer(graf, canvas_width=800, canvas_height=480, margin=10)
+    viewer.run()
