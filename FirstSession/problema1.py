@@ -27,8 +27,8 @@ def create_labyrinth(rows: int, cols: int) -> UndirectedGraph:
 if __name__ == '__main__':
     rows = 40
     cols = 60
-    graf = create_labyrinth(rows, cols)
+    graph = create_labyrinth(rows, cols)
     source = (0, 0)
     target = (rows - 1, cols - 1)
-    viewer = LabyrinthViewer(graf, canvas_width=800, canvas_height=480, margin=10)
+    viewer = LabyrinthViewer(graph, canvas_width=800, canvas_height=480, margin=10)
     viewer.run()

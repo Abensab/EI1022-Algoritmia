@@ -1,58 +1,60 @@
 from algoritmia.datastructures.mergefindsets import MergeFindSet
 from algoritmia.datastructures.digraphs import UndirectedGraph
 from algoritmia.datastructures.queues import Fifo
-
+from FirstSession.problema2 import path
 from Utils.labyrinthviewer import LabyrinthViewer
 import random
 
-from problema1 import create_labyrinth
-from problema2 import path
 
-
-def create_labyrinth_modi(rows: int, cols: int, n: int = 0) -> UndirectedGraph:
-    vertices = [(r, c) for r in range(rows) for c in range(cols)]
+def create_labyrinth_mod(rows: int, cols: int, n: int = 0) -> UndirectedGraph:
+    vertex = [(r, c) for r in range(rows) for c in range(cols)]
     mfs = MergeFindSet()
-    for v in vertices:
+    for v in vertex:
         mfs.add(v)
 
     edges = []
-    for (i, j) in vertices:
+    for (i, j) in vertex:
         edges.append(((i, j), (i, j + 1))) if j + 1 < cols else ""
         edges.append(((i, j), (i + 1, j))) if i + 1 < rows else ""
 
     random.shuffle(edges)
     corridors = []
     discarded_edges = []
+
     for (u, v) in edges:
         if mfs.find(u) != mfs.find(v):
             mfs.merge(u, v)
             corridors.append((u, v))
         else:
             discarded_edges.append((u, v))
-    corridors.extend(discarded_edges[:n])
-    return UndirectedGraph(E=corridors)
+
+    graph_wo_mod = UndirectedGraph(E=corridors)
+    new_corridors = corridors[:]
+    new_corridors.extend(discarded_edges[:n])
+    graph_mod = UndirectedGraph(E=new_corridors)
+    return graph_wo_mod, graph_mod
 
 
-def recorredor_aristas_anchura(grafo, v_inicial):
+def traveler_edges_width(graph, v_initial):
     edges = []
     queue = Fifo()
     seen = set()
-    queue.push((v_inicial, v_inicial))
-    seen.add(v_inicial)
+    queue.push((v_initial, v_initial))
+    seen.add(v_initial)
     while len(queue) > 0:
         u, v = queue.pop()
         edges.append((u, v))
-        for suc in grafo.succs(v):
+        for suc in graph.succs(v):
             if suc not in seen:
                 seen.add(suc)
                 queue.push((v, suc))
     return edges
 
 
-def recuperador_camino(lista_aristas, v):
+def road_recuperator(edges_list, v):
     # Create a dictionary of bakcpointers(bp)
     bp = {}
-    for o, d in lista_aristas:
+    for o, d in edges_list:
         bp[d] = o
     # Rebuilding the way going back
     way = [v]
@@ -68,17 +70,17 @@ if __name__ == '__main__':
     random.seed(42)
     num_rows = 80
     num_cols = 140
-    num_paredes_quitadas = 20
+    num_wall_remove = 1600
     source = (0, 0)
     target = (num_rows - 1, num_cols - 1)
 
-    graf = create_labyrinth(num_rows, num_cols)
-    graf_modi = create_labyrinth_modi(num_rows, num_cols, n=num_paredes_quitadas)
+    graf, graf_mod = create_labyrinth_mod(num_rows, num_cols, n=num_wall_remove)
 
-    camino = path(graf, source, target)
-    camino_modi = recuperador_camino(recorredor_aristas_anchura(graf_modi, source), target)
+    way = path(graf, source, target)
+    way_mod = road_recuperator(traveler_edges_width(graf_mod, source), target)
 
-    viewer = LabyrinthViewer(graf_modi, canvas_width=800, canvas_height=480, margin=10)
-    viewer.add_path(camino, color="red")
-    viewer.add_path(camino_modi, color="blue")
+    print("Solución: \n\t- Sin tumbar paredes:", len(way), "\n\t-Tumbando paredes:", len(way_mod))
+    viewer = LabyrinthViewer(graf_mod, canvas_width=800, canvas_height=480, margin=10)
+    viewer.add_path(way, color="red")
+    viewer.add_path(way_mod, color="blue")
     viewer.run()

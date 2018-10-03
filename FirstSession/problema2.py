@@ -1,35 +1,35 @@
 from algoritmia.datastructures.digraphs import UndirectedGraph
-from problema1 import create_labyrinth
+from FirstSession.problema1 import create_labyrinth
 from Utils.labyrinthviewer import LabyrinthViewer
 
 
-def path(g: UndirectedGraph, source, target):
-    la = recorredor_de_aristas_en_profundidad(g, source)
+def path(g: UndirectedGraph, source: "T", target: "T") -> "List<T>":
+    la = traveler_edges_depth(g, source)
     bp = {}
     for (u, v) in la:
         bp[v] = u
-    camino = []
+    road = []
     v = target
-    camino.append(v)
+    road.append(v)
     while bp[v] != v:
         v = bp[v]
-        camino.append(v)
+        road.append(v)
 
-    return camino
+    return road
 
 
-def recorredor_de_aristas_en_profundidad(ug: UndirectedGraph, v_inicial):
-    def recorrido_desde(u, v):
+def traveler_edges_depth(ug: UndirectedGraph, v_initial):
+    def travel_from(u, v):
         seen.add(v)
-        aristas.append((u, v))
+        edges.append((u, v))
         for suc in ug.succs(v):
             if suc not in seen:
-                recorrido_desde(v, suc)
+                travel_from(v, suc)
 
-    aristas = []
+    edges = []
     seen = set()
-    recorrido_desde(v_inicial, v_inicial)
-    return aristas
+    travel_from(v_initial, v_initial)
+    return edges
 
 
 if __name__ == '__main__':
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     graf = create_labyrinth(rows, cols)
     source = (0, 0)
     target = (rows - 1, cols - 1)
-    camino = path(graf, source, target)
+    road = path(graf, source, target)
     viewer = LabyrinthViewer(graf, canvas_width=800, canvas_height=480, margin=10)
-    viewer.add_path(camino, color='blue')
+    viewer.add_path(road, color='blue')
     viewer.run()

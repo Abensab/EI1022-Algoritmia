@@ -1,7 +1,7 @@
 from algoritmia.datastructures.digraphs import UndirectedGraph
 from algoritmia.datastructures.queues import Fifo
-
 from Utils.graph2dviewer import Graph2dViewer
+from Utils.printing import format_matrix
 
 
 def horse_graph(rows, cols):
@@ -33,9 +33,8 @@ def jump_matrix(grafo, num_rows, num_cols):
         for suc in grafo.succs(v):
             if suc not in seen:
                 seen.add(suc)
-                m[suc[0]][suc[1]] = m[v[0]][v[1]]+1
+                m[suc[0]][suc[1]] = m[v[0]][v[1]] + 1
                 queue.push(suc)
-
     return m
 
 
@@ -58,12 +57,6 @@ def travel_vertex_width(grafo, v_inicial):
 def num_achievable_spaces(graph, v_initial):
     return len(travel_vertex_width(graph, v_initial))
 
-def format_matrix(matrix):
-    s = [[str(e) for e in row] for row in matrix]
-    lens = [max(map(len, col)) for col in zip(*s)]
-    fmt = '\t'.join('[{{:{}}}]'.format(x) for x in lens)
-    table = [fmt.format(*row) for row in s]
-    return '\n'.join(table)
 
 if __name__ == '__main__':
     num_rows = 8
