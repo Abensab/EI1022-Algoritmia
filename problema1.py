@@ -21,7 +21,6 @@ def create_labyrinth(rows: int, cols: int) -> UndirectedGraph:
         if mfs.find(u) != mfs.find(v):
             mfs.merge(u, v)
             corridors.append((u, v))
-
     return UndirectedGraph(E=corridors)
 
 

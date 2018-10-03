@@ -3,7 +3,7 @@ from problema1 import create_labyrinth
 from Utils.labyrinthviewer import LabyrinthViewer
 
 
-def path(g, source, target):
+def path(g: UndirectedGraph, source, target):
     la = recorredor_de_aristas_en_profundidad(g, source)
     bp = {}
     for (u, v) in la:
@@ -40,5 +40,5 @@ if __name__ == '__main__':
     target = (rows - 1, cols - 1)
     camino = path(graf, source, target)
     viewer = LabyrinthViewer(graf, canvas_width=800, canvas_height=480, margin=10)
-    viewer.add_path(camino,color='blue')
+    viewer.add_path(camino, color='blue')
     viewer.run()
