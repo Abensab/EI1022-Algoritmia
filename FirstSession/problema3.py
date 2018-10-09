@@ -81,6 +81,5 @@ if __name__ == '__main__':
 
     print("Solución: \n\t- Sin tumbar paredes:", len(way), "\n\t-Tumbando paredes:", len(way_mod))
     viewer = LabyrinthViewer(graf_mod, canvas_width=800, canvas_height=480, margin=10)
-    viewer.add_path(way, color="red")
     viewer.add_path(way_mod, color="blue")
     viewer.run()
