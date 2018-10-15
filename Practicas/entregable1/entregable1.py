@@ -74,7 +74,7 @@ def get_remove_edge(matrix_init, matrix_fin, descartados):
 
     for s, t in descartados:
         if matrix_init[s[0]][s[1]] + matrix_fin[t[0]][t[1]] < min:
-            edge_remove = (s, t)
+            edge_remove = s, t
             min = matrix_init[s[0]][s[1]] + matrix_fin[t[0]][t[1]]
 
     return edge_remove, min
@@ -125,11 +125,12 @@ if __name__ == '__main__':
     new_road = path(new_graph, source, target)
 
     print(' '.join([str(i[0]) + " " + str(i[1]) for i in edge]))
-    print(len(road))
-    print(len(new_road))
+    print(len(road)-1)
+    print(distance+1)
 
-    print("\n\n--- %s seconds ---" % (time.time() - start_time))
-    viewer = LabyrinthViewer(graph, canvas_width=800, canvas_height=480, margin=10)
-    viewer.add_path(new_road, color="green", offset=-3)
-    viewer.add_path(road, color="blue")
-    viewer.run()
+    #print("\n\n--- %s seconds ---" % (time.time() - start_time))
+
+    # viewer = LabyrinthViewer(graph, canvas_width=800, canvas_height=480, margin=10)
+    # viewer.add_path(new_road, color="green", offset=-3)
+    # viewer.add_path(road, color="blue")
+    # viewer.run()

@@ -322,7 +322,8 @@ class Comprobador(Procesador):
         if not self.vistaEntrada:
             self.salida.write(colorea(ROJO, "Antes de la primera entrada\n"))
             if esalida:
-                self.muestra_salida("", salida_encontrada, "Salida esperada:", "Salida encontrada:")
+                self.muestra_salida("", salida_encontrada, ""
+                                                           "", "Salida encontrada:")
             if eerror:
                 self.muestra_salida("", error_encontrado, "Salida de error esperada:", "Salida de error encontrada:")
         else:
