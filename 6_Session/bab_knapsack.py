@@ -1,3 +1,4 @@
+import time
 from random import randint, seed
 from typing import *
 from Utils.bab_scheme import BabPartialSolution, BabSolver, Solution
@@ -19,12 +20,28 @@ def knapsack_bab_solve(weights, values, capacity):
 
         # TODO: IMPLEMENTAR - relajar problema (resolver mochila continua para los objetos que quedan)
         def calc_opt_bound(self) -> Union[int, float]:
-            return self.current_value + sum(values[self.n:])  # AHORA ES DEMASIADO OPTIMISTA (asume que puede coger todo lo que queda)
+            weight = self.current_weight
+            value = self.current_value
+            for i in range(self.n, len(weights)):
+                if weight+weights[i] <= capacity:
+                    weight += weights[i]
+                    value += values[i]
+                else:
+                    value += (values[i]*(capacity-weight))/weights[i]
+                    break
+            return value
+            # return self.current_value + sum(values[self.n:])
 
         # TODO: IMPLEMENTAR - utilizar algoritmo voraz (visto en el tema de voraces)
         def calc_pes_bound(self) -> Union[int, float]:
+            weight = self.current_weight
+            value = self.current_value
+            for i in range(self.n, len(weights)):
+                if weight + weights[i] <= capacity:
+                    weight += weights[i]
+                    value += values[i]
             return self.current_value  # AHORA ES DEMASIADO PESIMISTA (asume que no puede coger nada más de lo que queda)
-
+            # return self.current_value
         def is_solution(self) -> bool:
             return self.n == len(values)
 
@@ -63,18 +80,18 @@ def create_knapsack_problem(num_objects):
 
 # PROGRAMA PRINCIPAL -------------------------------------------------------
 if __name__ == "__main__":
+    start = time.time()
     # Tres instancias del problema. Descomenta la que quieras resolver:
-    W, V, C = [2, 1, 6, 5, 6], [4, 1, 3, 2, 2], 10  # Solution: value = 8, weight = 9, decisions = (1, 1, 1, 0, 0)
+    # W, V, C = [2, 1, 6, 5, 6], [4, 1, 3, 2, 2], 10  # Solution: value = 8, weight = 9, decisions = (1, 1, 1, 0, 0)
     # W, V, C = create_knapsack_problem(20)          # Solution: value = 1118, weight = 344, decisions = (1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
-    # W, V, C = create_knapsack_problem(35)          # Solution: value = 1830, weight = 543, decisions = (1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-
+    W, V, C = create_knapsack_problem(5000)          # Solution: value = 1830, weight = 543, decisions = (1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     print("PROBLEM:")
     print("\tNum. objects:", len(W))
     print("\tKnapsack capacity:", C)
 
     print("\nStart B&B...")
-    solution_value, solution_weight, solution_decisions = knapsack_bab_solve(W, V, C)
+    solution_value, solution_weight, solution_decisions = knapsack_bab_solve(W, V, C) #Could be return none, it generates a exception bc pretends assign none to 3 params
 
     print("\tSolution: value = {0}, weight = {1}, decisions = {2}".format(solution_value, solution_weight,
                                                                           solution_decisions))
-    print("...END.")
+    print("...END.", time.time()-start)
