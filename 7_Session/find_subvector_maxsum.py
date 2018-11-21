@@ -1,8 +1,15 @@
 def find_subvector_maxsum(v):
     def rec(b: int, e: int):
-        print("hola")
+        if e-b==1:
+            return b
+        h=(b+e)//2
+        m_izq = rec(b, h)
+        m_der = rec(h, e)
+        m_mitad = whiles ricos
 
     return rec(0, len(v))
+
+def get_beter_half(b,e):
 
 if __name__=="__main__":
     lists= {
