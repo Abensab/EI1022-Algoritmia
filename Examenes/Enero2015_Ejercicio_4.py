@@ -11,10 +11,10 @@ def coloca_seguratas(pos_cuadros: List[float], D : float, L : float) -> List[flo
                 res.append(pos_cuadros[x] + D)
             else:
                 res.append(pos_cuadros[x])
-        else:
-            if res[-1] + D < pos_cuadros[x] and pos_cuadros[x] + D < L:
+        elif res[-1] + D < pos_cuadros[x]:
+            if pos_cuadros[x] + D < L:
                 res.append(pos_cuadros[x]+D)
-            elif res[-1] + D < pos_cuadros[x] and pos_cuadros[x] + D >= L:
+            else:
                 res.append(pos_cuadros[x])
     return res
 
