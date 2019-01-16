@@ -3,7 +3,7 @@ from typing import *
 
 
 def problema(C: List[int], A: int, B: int):
-    class SumaDosEnteros(PartialSolutionWithVisitedControl):
+    class SumaDosEnterosPS(PartialSolutionWithVisitedControl):
         def __init__(self, quedan_a: int, quedan_b: int, sa: List[int], sb: List[int], index):
             self.quedan_a = quedan_a
             self.quedan_b = quedan_b
@@ -29,12 +29,12 @@ def problema(C: List[int], A: int, B: int):
                     self.quedan_b -= C[self.index]
                     self.sb.append(C[self.index])
 
-                yield SumaDosEnteros(self.quedan_a, self.quedan_b, self.sa, self.sb, self.index + 1)
+                yield SumaDosEnterosPS(self.quedan_a, self.quedan_b, self.sa, self.sb, self.index + 1)
 
         def state(self) -> State:
             return self.quedan_a, self.quedan_b, self.index
 
-    return BacktrackingVCSolver.solve(SumaDosEnteros(A, B, [], [], 0))
+    return BacktrackingVCSolver.solve(SumaDosEnterosPS(A, B, [], [], 0))
 
 
 if __name__ == "__main__":
